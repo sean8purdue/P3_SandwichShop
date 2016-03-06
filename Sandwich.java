@@ -99,11 +99,12 @@ public class Sandwich implements PurchasedItem {
     }
     //-------------------- Getter and Setter End
 
+    //++++++++++++++++++++ Condiments Maintain Methods
     public void addCondiments(int num) {
         if (this.numCon + num >= 0) {
             this.numCon += num;
-            setMatCost(getMatCost() + this.numCon * costOfCondiment);
-            setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
+//            setMatCost(getMatCost() + this.numCon * costOfCondiment);
+//            setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
         }
     }
 
@@ -111,8 +112,8 @@ public class Sandwich implements PurchasedItem {
         if (this.numCon - num >= 0) {
             this.numCon -= num;
             //?2 might be wrong
-            setMatCost(getMatCost() + this.numCon * costOfCondiment);
-            setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
+//            setMatCost(getMatCost() + this.numCon * costOfCondiment);
+//            setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
         }
     }
 
@@ -120,4 +121,43 @@ public class Sandwich implements PurchasedItem {
         return this.numCon;
     }
 
+    //-------------------- Condiments Maintain Methods
+
+    //++++++++++++++++++++ Override Interface Methods
+    @Override
+    public boolean isDelivery() {
+        if (delTime > 0 && delTime < 60)
+            return true;
+
+        return false;
+    }
+
+    @Override
+    public String getCustomerName() {
+        return name;
+    }
+
+    @Override
+    public int getDeliveryTime() {
+        return this.delTime;
+    }
+
+    @Override
+    public void setDeliveryTime(int time) {
+        this.delTime = time;
+    }
+
+    @Override
+    public double getMaterialCost() {
+        setMatCost(getMatCost() + this.numCon * costOfCondiment);
+        return getMatCost();
+    }
+
+    @Override
+    public double getSalePrice() {
+        setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
+        return getSellPrice();
+    }
+
+    //-------------------- Override Interface Methods
 }
