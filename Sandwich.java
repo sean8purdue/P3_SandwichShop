@@ -23,8 +23,8 @@ public class Sandwich implements PurchasedItem {
         this.condiments = 0;
         this.level = null;
         this.delTime = 0;
-        this.sellPrice = 0;
-        this.matCost = 0;
+        this.sellPrice = 0.0;
+        this.matCost = 0.0;
         this.numCon = 0;
 
     }
@@ -161,7 +161,7 @@ public class Sandwich implements PurchasedItem {
 
     @Override
     public double getSalePrice() {
-        setSellPrice(getSalePrice() + getNumCondients() * pricePerCondiment);
+        setSellPrice(getSellPrice() + getNumCondients() * pricePerCondiment);
         return getSellPrice();
     }
 
@@ -175,7 +175,7 @@ public class Sandwich implements PurchasedItem {
         if (obj instanceof Sandwich
                 && this.name.equals(((Sandwich) obj).name)
                 && this.getMatCost() == ((Sandwich) obj).getMatCost()
-                && this.getSalePrice() == ((Sandwich) obj).getSalePrice()
+                && this.getSellPrice() == ((Sandwich) obj).getSellPrice()
                 && this.delTime == ((Sandwich) obj).delTime
                 && this.level == ((Sandwich) obj).level
                 )
