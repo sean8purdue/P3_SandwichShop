@@ -99,11 +99,12 @@ public class Sandwich implements PurchasedItem {
     }
     //-------------------- Getter and Setter End
 
+    //++++++++++++++++++++ Condiments Maintain Methods
     public void addCondiments(int num) {
         if (this.numCon + num >= 0) {
             this.numCon += num;
-            setMatCost(getMatCost() + this.numCon * costOfCondiment);
-            setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
+//            setMatCost(getMatCost() + this.numCon * costOfCondiment);
+//            setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
         }
     }
 
@@ -111,13 +112,76 @@ public class Sandwich implements PurchasedItem {
         if (this.numCon - num >= 0) {
             this.numCon -= num;
             //?2 might be wrong
-            setMatCost(getMatCost() + this.numCon * costOfCondiment);
-            setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
+//            setMatCost(getMatCost() + this.numCon * costOfCondiment);
+//            setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
         }
     }
 
     public int getNumCondients() {
         return this.numCon;
+    }
+
+    //-------------------- Condiments Maintain Methods End
+
+    //++++++++++++++++++++ Override Interface Methods
+    @Override
+    public boolean isDelivery() {
+        if (delTime > 0 && delTime < 60)
+            return true;
+
+        return false;
+    }
+
+    @Override
+    public String getCustomerName() {
+        return name;
+    }
+
+    @Override
+    public int getDeliveryTime() {
+        return this.delTime;
+    }
+
+    @Override
+    public void setDeliveryTime(int time) {
+        //b2
+        // input validation to ensure the new value is logically correct.
+        if (delTime >= 0)
+            this.delTime = time;
+    }
+
+    @Override
+    public double getMaterialCost() {
+        //b1 bug1
+        // private numCon, can't use this.numCon
+        //setMatCost(getMatCost() + this.numCon * costOfCondiment);
+        setMatCost(getMatCost() + getNumCondients() * costOfCondiment);
+        return getMatCost();
+    }
+
+    @Override
+    public double getSalePrice() {
+        setSellPrice(getSalePrice() + getNumCondients() * pricePerCondiment);
+        return getSellPrice();
+    }
+
+    //-------------------- Override Interface Methods
+
+    @Override
+    public boolean equals(Object obj) {
+        //?2 why (Sandwich) obj.name
+        //   not  obj.name;
+        //?3 price are the same to the nearest cent??
+        if (obj instanceof Sandwich
+                && this.name.equals(((Sandwich) obj).name)
+                && this.getMatCost() == ((Sandwich) obj).getMatCost()
+                && this.getSalePrice() == ((Sandwich) obj).getSalePrice()
+                && this.delTime == ((Sandwich) obj).delTime
+                && this.level == ((Sandwich) obj).level
+                )
+            return true;
+
+        return false;
     }
 
 }
