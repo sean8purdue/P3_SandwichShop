@@ -121,7 +121,7 @@ public class Sandwich implements PurchasedItem {
         return this.numCon;
     }
 
-    //-------------------- Condiments Maintain Methods
+    //-------------------- Condiments Maintain Methods End
 
     //++++++++++++++++++++ Override Interface Methods
     @Override
@@ -144,20 +144,44 @@ public class Sandwich implements PurchasedItem {
 
     @Override
     public void setDeliveryTime(int time) {
-        this.delTime = time;
+        //b2
+        // input validation to ensure the new value is logically correct.
+        if (delTime >= 0)
+            this.delTime = time;
     }
 
     @Override
     public double getMaterialCost() {
-        setMatCost(getMatCost() + this.numCon * costOfCondiment);
+        //b1 bug1
+        // private numCon, can't use this.numCon
+        //setMatCost(getMatCost() + this.numCon * costOfCondiment);
+        setMatCost(getMatCost() + getNumCondients() * costOfCondiment);
         return getMatCost();
     }
 
     @Override
     public double getSalePrice() {
-        setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
+        setSellPrice(getSalePrice() + getNumCondients() * pricePerCondiment);
         return getSellPrice();
     }
 
     //-------------------- Override Interface Methods
+
+    @Override
+    public boolean equals(Object obj) {
+        //?2 why (Sandwich) obj.name
+        //   not  obj.name;
+        //?3 price are the same to the nearest cent??
+        if (obj instanceof Sandwich
+                && this.name.equals(((Sandwich) obj).name)
+                && this.getMatCost() == ((Sandwich) obj).getMatCost()
+                && this.getSalePrice() == ((Sandwich) obj).getSalePrice()
+                && this.delTime == ((Sandwich) obj).delTime
+                && this.level == ((Sandwich) obj).level
+                )
+            return true;
+
+        return false;
+    }
+
 }
