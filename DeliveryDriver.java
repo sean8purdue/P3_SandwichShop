@@ -29,7 +29,7 @@ public class DeliveryDriver {
         this.minutesDelivering = 0;
         this.numItems = 0;
 
-        //?1 not sure how to initialize an object array;
+        // ?1 not sure how to initialize an object array;
         this.items = new PurchasedItem[maxCarriableItems];
     }
 
@@ -119,14 +119,18 @@ public class DeliveryDriver {
     public void deliverOrders() {
        // TO-DO
         if (numItems > 0) {
+            // Maintain minutesDelivering and numDeliveries
             for (int i = 0; i < numItems; i++) {
                 minutesDelivering += items[i].getDeliveryTime();
             }
+
+            this.numDeliveries += numItems;
 
             //?3 empty the list of items
             for (int i = 0; i < numItems; i++) {
                 items[i] = null;
             }
+            numItems = 0;
         }
 
     }
@@ -143,8 +147,8 @@ public class DeliveryDriver {
         // TO-DO
         if (numItems > 0) {
             for (int i = 0; i < numItems; i++) {
-                //?2 how to know if two items equal??
-                if (items[i] == item) {
+                // ?2 how to know if two items equal??
+                if (items[i].equals(item)) {
                     for (int j = i + 1; j < numItems; j++) {
                         items[j-1] = items[j];
                     }
