@@ -71,7 +71,8 @@ public class Sandwich implements PurchasedItem {
     }
 
     public void setLevel(Spicyness level) {
-        this.level = level;
+        if (level != null)
+            this.level = level;
     }
 
     public int getDelTime() {
@@ -79,7 +80,8 @@ public class Sandwich implements PurchasedItem {
     }
 
     public void setDelTime(int delTime) {
-        this.delTime = delTime;
+        if (delTime > 0)
+            this.delTime = delTime;
     }
 
     public double getSellPrice() {

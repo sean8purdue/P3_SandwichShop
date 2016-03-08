@@ -194,7 +194,8 @@ public class DeliveryDriver {
 
         DeliveryDriver that = (DeliveryDriver) o;
 
-        if (Double.compare(that.getWage(), getWage()) != 0) return false;
+//        if (Double.compare(that.getWage(), getWage()) != 0) return false;
+        if (!(Math.abs(getWage() - that.getWage()) < 0.01)) return false;
         if (numDeliveries != that.numDeliveries) return false;
         if (minutesDelivering != that.minutesDelivering) return false;
         return getName() != null ? getName().equals(that.getName()) : that.getName() == null;
