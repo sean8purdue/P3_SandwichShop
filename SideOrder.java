@@ -18,47 +18,39 @@ public class SideOrder implements PurchasedItem {
     public static double sellLarge = 3.00;
     public static double sellAbsurd = 4.50;
 
-    // Default Constructor
-    public SideOrder() {
-        this.name = null;
-        this.matCost = 0.0;
-        this.sellPrice = 0.0;
-        this.delTime = 0;
-        this.size = OrderSize.SMALL;
-    }
-
-    public SideOrder(String name, double matCost, double sellPrice) {
-        this();
+    // Constructor Chaining
+    public SideOrder(String name, double matCost, double sellPrice, int delTime, OrderSize size) {
         this.name = name;
         this.matCost = matCost;
         this.sellPrice = sellPrice;
-    }
-
-    public SideOrder(String name, double matCost, double sellPrice, int delTime) {
-        this(name, matCost, sellPrice);
         this.delTime = delTime;
-    }
-
-    public SideOrder(String name, double matCost, double sellPrice, int delTime, OrderSize size) {
-        this(name, matCost, sellPrice, delTime);
         this.size = size;
     }
 
-    // Getter and Setter Methods
-    public String getName() {
-        return name;
+    public SideOrder(String name, double matCost, double sellPrice, int delTime) {
+        this(name, matCost, sellPrice, delTime, OrderSize.SMALL);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public SideOrder(String name, double matCost, double sellPrice) {
+        this(name, matCost, sellPrice, 0, OrderSize.SMALL);
     }
+
+    // Getter and Setter Methods
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
 
     public double getMatCost() {
         return matCost;
     }
 
     public void setMatCost(double matCost) {
-        this.matCost = matCost;
+        if (matCost > 0)
+            this.matCost = matCost;
     }
 
     public double getSellPrice() {
@@ -66,23 +58,25 @@ public class SideOrder implements PurchasedItem {
     }
 
     public void setSellPrice(double sellPrice) {
-        this.sellPrice = sellPrice;
+        if (sellPrice > 0)
+            this.sellPrice = sellPrice;
     }
 
-    public int getDelTime() {
-        return delTime;
-    }
+//    public int getDelTime() {
+//        return delTime;
+//    }
+//
+//    public void setDelTime(int delTime) {
+//        this.delTime = delTime;
+//    }
 
-    public void setDelTime(int delTime) {
-        this.delTime = delTime;
-    }
-
-    public OrderSize getSize() {
+    public OrderSize getOrderSize() {
         return size;
     }
 
-    public void setSize(OrderSize size) {
-        this.size = size;
+    public void setOrderSize(OrderSize size) {
+        if (size != null)
+            this.size = size;
     }
 
     @Override
@@ -146,7 +140,7 @@ public class SideOrder implements PurchasedItem {
                 break;
 
             case MEDIUM:
-                setSellPrice(getSellPrice() + sellSmall);
+                setSellPrice(getSellPrice() + sellMedium);
                 break;
 
             case LARGE:
@@ -165,21 +159,38 @@ public class SideOrder implements PurchasedItem {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        //?2 why (Sandwich) obj.name
-        //   not  obj.name;
-        //?3 price are the same to the nearest cent??
-        if (obj instanceof SideOrder
-                && this.name.equals(((SideOrder) obj).name)
-                && this.getMatCost() == ((SideOrder) obj).getMatCost()
-                && this.getSellPrice() == ((SideOrder) obj).getSellPrice()
-                && this.delTime == ((SideOrder) obj).delTime
-                && this.size == ((SideOrder) obj).size
-                )
-            return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        return false;
+        SideOrder sideOrder = (SideOrder) o;
+
+//        if (Double.compare(sideOrder.getMatCost(), getMatCost()) != 0) return false;
+        if (!(Math.abs(getMatCost() - sideOrder.getMatCost()) < 0.01)) return false;
+//        if (Double.compare(sideOrder.getSellPrice(), getSellPrice()) != 0) return false;
+        if (!(Math.abs(getSellPrice() - sideOrder.getSellPrice()) < 0.01)) return false;
+        if (delTime != sideOrder.delTime) return false;
+        if (name != null ? !name.equals(sideOrder.name) : sideOrder.name != null) return false;
+        return size == sideOrder.size;
+
     }
+
+    //    @Override
+//    public boolean equals(Object obj) {
+//        //?2 why (Sandwich) obj.name
+//        //   not  obj.name;
+//        //?3 price are the same to the nearest cent??
+//        if (obj instanceof SideOrder
+//                && this.name.equals(((SideOrder) obj).name)
+//                && this.getMatCost() == ((SideOrder) obj).getMatCost()
+//                && this.getSellPrice() == ((SideOrder) obj).getSellPrice()
+//                && this.delTime == ((SideOrder) obj).delTime
+//                && this.size == ((SideOrder) obj).size
+//                )
+//            return true;
+//
+//        return false;
+//    }
 
 
 }

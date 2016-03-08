@@ -1,0 +1,23 @@
+1. PurchasedItem Interface
+For setter methods, you must perform input validation to ensure the new value you are setting is logically correct.
+
+2. Hard!!! _ Equals Method of Sandwich!!
+
+3. Constructor Chaining
+
+4. SideOrder Class
+in Equals Method
+The base material costs and base selling prices of both objects are the same to the nearest cent.
+
+5. DeliveryDriver Class
+in Equals Method
+The wages of the two drivers are equal (within a cent).
+
+6. Store Class
+a. Constructor
+public Store(String storeName, int numDrivers)
+For this constructor, you must initialize all of the DeliveryDriver objects and the array that contains them. When initializing all of the driver objects, you should use the constructor that only accepts the driver's name. The driver's name should be “Driver$(I)” where the value of I is the driver object's index in the array. (Driver0, Driver1…)
+public Store(String storeName, DeliveryDriver[] drivers)
+It can be assumed that the array of DeliveryDriver objects has been initialized properly, has no empty locations, and that all of the DeliveryDriver instances have been initialized properly.
+
+b. Placing Orders

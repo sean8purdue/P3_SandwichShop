@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 public class DeliveryDriver {
 
@@ -9,7 +10,7 @@ public class DeliveryDriver {
 
     private int maxCarriableItems;
 
-    private int numDeliveries;
+    private int numDeliveries; //? no update
 
     private int minutesDelivering;
 
@@ -19,14 +20,27 @@ public class DeliveryDriver {
 
     public DeliveryDriver(String name, double wage, int maxCarriableItems) {
         // TO-DO
+//        super();
+        this.name = name;
+        this.wage = wage;
+        this.maxCarriableItems = maxCarriableItems;
+
+        this.numDeliveries = 0;
+        this.minutesDelivering = 0;
+        this.numItems = 0;
+
+        //?1 not sure how to initialize an object array;
+        this.items = new PurchasedItem[maxCarriableItems];
     }
 
     public DeliveryDriver(String name, double wage) {
         // TO-DO
+        this(name, wage, 5);
     }
 
     public DeliveryDriver(String name) {
         // TO-DO
+        this(name, 7.25);
     }
 
     public String getName() {
@@ -63,8 +77,13 @@ public class DeliveryDriver {
      */
     public boolean pickupOrder(PurchasedItem item) {
         // TO-DO
+        if (item.isDelivery() && numItems < maxCarriableItems) {
+            items[numItems] = item;
+            numItems++;
+            return true;
+            }
 
-        return true;
+        return false;
     }
 
     /**
@@ -75,7 +94,7 @@ public class DeliveryDriver {
     public int getNumOrders() {
         // TO-DO
 
-        return 0;
+        return this.numItems;
     }
 
 
@@ -87,8 +106,10 @@ public class DeliveryDriver {
      * */
     public PurchasedItem[] getOrders() {
         // TO-DO
+        PurchasedItem[] rt = new PurchasedItem[getNumOrders()];
+        rt = Arrays.copyOf(items, items.length);
 
-        return null;
+        return rt;
     }
 
     /**
@@ -97,6 +118,17 @@ public class DeliveryDriver {
      */
     public void deliverOrders() {
        // TO-DO
+        if (numItems > 0) {
+            for (int i = 0; i < numItems; i++) {
+                minutesDelivering += items[i].getDeliveryTime();
+            }
+
+            //?3 empty the list of items
+            for (int i = 0; i < numItems; i++) {
+                items[i] = null;
+            }
+        }
+
     }
 
     /**
@@ -109,8 +141,21 @@ public class DeliveryDriver {
      */
     public boolean removeOrder(PurchasedItem item) {
         // TO-DO
+        if (numItems > 0) {
+            for (int i = 0; i < numItems; i++) {
+                //?2 how to know if two items equal??
+                if (items[i] == item) {
+                    for (int j = i + 1; j < numItems; j++) {
+                        items[j-1] = items[j];
+                    }
+                    numItems--;
 
-        return true;
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 
@@ -120,8 +165,20 @@ public class DeliveryDriver {
      */
     public double getMoneyEarned() {
         // TO-DO
+        // convert minutes to hour and times Wage
+        double hour;
+        double money;
+        hour = getTimeSpent() / 60.0;
 
-        return 0.0;
+        if (hour <= 8) {
+            // base pay
+            money = wage * hour;
+        } else {
+            // overtime pay
+            money = wage * 8 + (hour - 8) * wage * 1.5;
+        }
+
+        return money;
     }
 
     /**
@@ -131,10 +188,18 @@ public class DeliveryDriver {
      * @return true if they are, false if they are not
      */
     @Override
-    public boolean equals(Object obj) {
-        // TO-DO
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        return true;
+        DeliveryDriver that = (DeliveryDriver) o;
+
+//        if (Double.compare(that.getWage(), getWage()) != 0) return false;
+        if (!(Math.abs(getWage() - that.getWage()) < 0.01)) return false;
+        if (numDeliveries != that.numDeliveries) return false;
+        if (minutesDelivering != that.minutesDelivering) return false;
+        return getName() != null ? getName().equals(that.getName()) : that.getName() == null;
+
     }
 
     @Override

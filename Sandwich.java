@@ -9,43 +9,32 @@ public class Sandwich implements PurchasedItem {
     private double sellPrice;
     private double matCost;
 
-    private int numCon; // number of Condiments
+//    private int numCon; // number of Condiments
 
     //?1 not sure? why don't set to final
-    //? diffrence public static final
-    public static double costOfCondiment = 0.05;
-    public static double pricePerCondiment = 0.75;
-
-
-    // @Default Constructor
-    public Sandwich() {
-        this.name = null;
-        this.condiments = 0;
-        this.level = null;
-        this.delTime = 0;
-        this.sellPrice = 0.0;
-        this.matCost = 0.0;
-        this.numCon = 0;
-
-    }
+    // diffrence public static final
+    //! can be set as final
+    private static double costOfCondiment = 0.05;
+    private static double pricePerCondiment = 0.75;
 
     //++++++++++++++++++++ Constructor
-    public Sandwich(String name, double matCost) {
-        this();
+    public Sandwich(String name, double matCost, double sellPrice, int delTime, Spicyness level, int condiments) {
         this.name = name;
         this.matCost = matCost;
-    }
-
-    public Sandwich(String name, double matCost, double sellPrice) {
-        this(name, matCost);
         this.sellPrice = sellPrice;
-    }
-
-    public Sandwich(String name, double matCost, double sellPrice, int delTime, Spicyness level, int condiments) {
-        this(name, matCost, sellPrice);
         this.delTime = delTime;
         this.level = level;
         this.condiments = condiments;
+
+//        this.numCon = 0; // should be the same as condiments
+    }
+
+    public Sandwich(String name, double matCost, double sellPrice) {
+        this(name, matCost, sellPrice, 0, Spicyness.MILD, 0);
+    }
+
+    public Sandwich(String name, double matCost) {
+        this(name, matCost, 3.5 * matCost, 0, Spicyness.MILD, 0);
     }
     //-------------------- Constructor End
 
@@ -55,7 +44,8 @@ public class Sandwich implements PurchasedItem {
     }
 
     public void setName(String name) {
-        this.name = name;
+        if (name != null)
+            this.name = name;
     }
 
     public int getCondiments() {
@@ -63,7 +53,8 @@ public class Sandwich implements PurchasedItem {
     }
 
     public void setCondiments(int condiments) {
-        this.condiments = condiments;
+        if (condiments >= 0)
+            this.condiments = condiments;
     }
 
     public Spicyness getLevel() {
@@ -71,7 +62,8 @@ public class Sandwich implements PurchasedItem {
     }
 
     public void setLevel(Spicyness level) {
-        this.level = level;
+        if (level != null)
+            this.level = level;
     }
 
     public int getDelTime() {
@@ -79,7 +71,8 @@ public class Sandwich implements PurchasedItem {
     }
 
     public void setDelTime(int delTime) {
-        this.delTime = delTime;
+        if (delTime >= 0)
+            this.delTime = delTime;
     }
 
     public double getSellPrice() {
@@ -87,7 +80,8 @@ public class Sandwich implements PurchasedItem {
     }
 
     public void setSellPrice(double sellPrice) {
-        this.sellPrice = sellPrice;
+        if (sellPrice >= 0)
+            this.sellPrice = sellPrice;
     }
 
     public double getMatCost() {
@@ -95,22 +89,36 @@ public class Sandwich implements PurchasedItem {
     }
 
     public void setMatCost(double matCost) {
-        this.matCost = matCost;
+        if (matCost >= 0)
+            this.matCost = matCost;
     }
     //-------------------- Getter and Setter End
 
     //++++++++++++++++++++ Condiments Maintain Methods
     public void addCondiments(int num) {
-        if (this.numCon + num >= 0) {
-            this.numCon += num;
+        if (num > 0) {
+            //? may have bugs
+            num += getCondiments();
+            setCondiments(num);
+        }
+//        if (this.condiments + num >= 0) {
+//            this.numCon += num;
 //            setMatCost(getMatCost() + this.numCon * costOfCondiment);
 //            setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
-        }
+//        }
     }
 
     public void removeCondiments(int num) {
-        if (this.numCon - num >= 0) {
-            this.numCon -= num;
+        if (num > 0) {
+            num -= getCondiments();
+            if (num < 0) {
+                setCondiments(0);
+            }
+            if (num > 0) {
+                setCondiments(num);
+        }
+//        if (this.numCon - num >= 0) {
+//            this.numCon -= num;
             //?2 might be wrong
 //            setMatCost(getMatCost() + this.numCon * costOfCondiment);
 //            setSellPrice(getSalePrice() + this.numCon * pricePerCondiment);
@@ -118,7 +126,7 @@ public class Sandwich implements PurchasedItem {
     }
 
     public int getNumCondients() {
-        return this.numCon;
+        return this.condiments;
     }
 
     //-------------------- Condiments Maintain Methods End
@@ -126,7 +134,7 @@ public class Sandwich implements PurchasedItem {
     //++++++++++++++++++++ Override Interface Methods
     @Override
     public boolean isDelivery() {
-        if (delTime > 0 && delTime < 60)
+        if (delTime > 0 && delTime <= 60)
             return true;
 
         return false;
@@ -142,6 +150,7 @@ public class Sandwich implements PurchasedItem {
         return this.delTime;
     }
 
+    //? the same as Setter and Getter Method in previous, Redundant?
     @Override
     public void setDeliveryTime(int time) {
         //b2
@@ -168,20 +177,36 @@ public class Sandwich implements PurchasedItem {
     //-------------------- Override Interface Methods
 
     @Override
-    public boolean equals(Object obj) {
-        //?2 why (Sandwich) obj.name
-        //   not  obj.name;
-        //?3 price are the same to the nearest cent??
-        if (obj instanceof Sandwich
-                && this.name.equals(((Sandwich) obj).name)
-                && this.getMatCost() == ((Sandwich) obj).getMatCost()
-                && this.getSellPrice() == ((Sandwich) obj).getSellPrice()
-                && this.delTime == ((Sandwich) obj).delTime
-                && this.level == ((Sandwich) obj).level
-                )
-            return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        return false;
+        Sandwich sandwich = (Sandwich) o;
+
+        if (getDelTime() != sandwich.getDelTime()) return false;
+        //? Base material costs and base selling price. Which is the base?
+//        if (Double.compare(sandwich.getSellPrice(), getSellPrice()) != 0) return false;
+        if (!(Math.abs(getSellPrice() - sandwich.getSellPrice()) < 0.01)) return false;
+//        if (Double.compare(sandwich.getMatCost(), getMatCost()) != 0) return false;
+        if (!(Math.abs(getMatCost() - sandwich.getMatCost()) < 0.01)) return false;
+        if (getName() != null ? !getName().equals(sandwich.getName()) : sandwich.getName() != null) return false;
+        return getLevel() == sandwich.getLevel();
+
     }
+//    public boolean equals(Object obj) {
+//        //?2 why (Sandwich) obj.name
+//        //   not  obj.name;
+//        //?3 price are the same to the nearest cent??
+//        if (obj instanceof Sandwich
+//                && this.name.equals(((Sandwich) obj).name)
+//                && this.getMatCost() == ((Sandwich) obj).getMatCost()
+//                && this.getSellPrice() == ((Sandwich) obj).getSellPrice()
+//                && this.delTime == ((Sandwich) obj).delTime
+//                && this.level == ((Sandwich) obj).level
+//                )
+//            return true;
+//
+//        return false;
+//    }
 
 }

@@ -13,10 +13,26 @@ public class Store {
 
     public Store(String storeName, DeliveryDriver[] drivers) {
         // TO-DO
+        // you must initialize all of the DeliveryDriver objects and the array that contains them
+        this.name = storeName;
+        this.drivers = drivers;
+        this.revenue = 0.0;
+        this.materialCosts = 0.0;
+
     }
 
     public Store(String storeName, int numDrivers) {
         // TO-DO
+        this(storeName, null);
+        DeliveryDriver[] driverList = new DeliveryDriver[numDrivers];
+        for (int i = 0; i < numDrivers; i++) {
+            String name = "Driver" + i;
+            DeliveryDriver tmp = new DeliveryDriver(name);
+            driverList[i] = tmp;
+        }
+
+        drivers = driverList;
+
     }
 
     String getStoreName() {
@@ -36,6 +52,7 @@ public class Store {
      */
     public void placeOrder(PurchasedItem item) {
         // TO-DO
+        if (item)
     }
 
 
