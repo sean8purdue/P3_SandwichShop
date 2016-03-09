@@ -11,6 +11,8 @@ public class Store {
 
     private DeliveryDriver[] drivers;
 
+    private int num;
+
     public Store(String storeName, DeliveryDriver[] drivers) {
         // TO-DO
         // you must initialize all of the DeliveryDriver objects and the array that contains them
@@ -18,11 +20,13 @@ public class Store {
         this.drivers = drivers;
         this.revenue = 0.0;
         this.materialCosts = 0.0;
+        this.num = 0;
 
     }
 
     public Store(String storeName, int numDrivers) {
         // TO-DO
+        // new Learning
         this(storeName, null);
         DeliveryDriver[] driverList = new DeliveryDriver[numDrivers];
         for (int i = 0; i < numDrivers; i++) {
@@ -31,8 +35,7 @@ public class Store {
             driverList[i] = tmp;
         }
 
-        drivers = driverList;
-
+        this.drivers = driverList;
     }
 
     String getStoreName() {
@@ -52,7 +55,23 @@ public class Store {
      */
     public void placeOrder(PurchasedItem item) {
         // TO-DO
-        if (item)
+//        if (item)
+        revenue += item.getSalePrice();
+        materialCosts += item.getMaterialCost();
+        if (item.isDelivery()) {
+            for (int i = num; i < drivers.length; i++) {
+                if (drivers[i].getNumOrders() < drivers[i].getMaxCapacity()) {
+                    if (drivers[i].pickupOrder(item)) {
+                        num = i;
+                        if (drivers[i].getNumOrders() == drivers[i].getMaxCapacity()) {
+                            drivers[i].deliverOrders();
+                            if (num == drivers.length - 1) num = 0;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
     }
 
 
@@ -73,8 +92,27 @@ public class Store {
      */
     public boolean cancelOrder(PurchasedItem item) {
         // TO-DO
+        revenue -= item.getSalePrice();
+        boolean flag = false;
+        if (item.isDelivery()) {
+            for (int i = 0; i < drivers.length; i++) {
+                if (drivers[i].getNumOrders() < drivers[i].getMaxCapacity()) {
+                    PurchasedItem[] orders = drivers[i].getOrders();
+                    if (orders == null) return false;
+                    else {
+                        for (int j = 0; j < orders.length; j++) {
+                            if (orders[i].equals(item)) {
+                                flag = true;
+                                drivers[i].removeOrder(item);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-        return true;
+        return flag;
     }
 
     /**
@@ -85,7 +123,7 @@ public class Store {
     public double getGrossRevenue() {
         // TO-DO
 
-        return 0.0;
+        return this.revenue;
     }
 
     /**
@@ -96,7 +134,7 @@ public class Store {
     public double getMaterialCosts() {
         // TO-DO
 
-        return 0.0;
+        return this.materialCosts;
     }
 
     /**
@@ -113,8 +151,16 @@ public class Store {
      */
     public double getNetProfit() {
         // TO-DO
+        double labor = 0.0;
+        double netProfit;
 
-        return 0.0;
+        for (int i = 0; i < drivers.length; i++) {
+            labor += drivers[i].getMoneyEarned();
+        }
+
+        netProfit = revenue - materialCosts - labor;
+
+        return netProfit;
     }
 
     /**
@@ -128,8 +174,10 @@ public class Store {
      */
     public double getNetIncome() {
         // TO-DO
+        double netIncome;
+        netIncome = getNetProfit() - 50 - getNetProfit() * 0.15;
 
-        return 0.0;
+        return netIncome;
     }
 
 

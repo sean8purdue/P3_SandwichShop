@@ -57,11 +57,11 @@ public class Sandwich implements PurchasedItem {
             this.condiments = condiments;
     }
 
-    public Spicyness getLevel() {
+    public Spicyness getSpicyness() {
         return level;
     }
 
-    public void setLevel(Spicyness level) {
+    public void setSpicyness(Spicyness level) {
         if (level != null)
             this.level = level;
     }
@@ -125,7 +125,8 @@ public class Sandwich implements PurchasedItem {
         }
     }
 
-    public int getNumCondients() {
+//    public int getNumCondients() {
+    public int getNumCondiments() {
         return this.condiments;
     }
 
@@ -164,13 +165,13 @@ public class Sandwich implements PurchasedItem {
         //b1 bug1
         // private numCon, can't use this.numCon
         //setMatCost(getMatCost() + this.numCon * costOfCondiment);
-        setMatCost(getMatCost() + getNumCondients() * costOfCondiment);
+        setMatCost(getMatCost() + getNumCondiments() * costOfCondiment);
         return getMatCost();
     }
 
     @Override
     public double getSalePrice() {
-        setSellPrice(getSellPrice() + getNumCondients() * pricePerCondiment);
+        setSellPrice(getSellPrice() + getNumCondiments() * pricePerCondiment);
         return getSellPrice();
     }
 
@@ -190,7 +191,7 @@ public class Sandwich implements PurchasedItem {
 //        if (Double.compare(sandwich.getMatCost(), getMatCost()) != 0) return false;
         if (!(Math.abs(getMatCost() - sandwich.getMatCost()) < 0.01)) return false;
         if (getName() != null ? !getName().equals(sandwich.getName()) : sandwich.getName() != null) return false;
-        return getLevel() == sandwich.getLevel();
+        return getSpicyness() == sandwich.getSpicyness();
 
     }
 //    public boolean equals(Object obj) {
